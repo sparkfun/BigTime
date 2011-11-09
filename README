@@ -1,9 +1,9 @@
-WatchMe is an open source hardware kit that allows the user to build their own watch.
+BigTime is an open source hardware kit that allows the user to build their own watch.
 
 The hardware design is released under CC-SA v3 license.
 The firmware is released under a modified beerware license.
 
-This project is forked with permission from Spikenzie labs' Solder:Time kit that is not open source. We really wanted to make the watch kits easier to hack so we combine the two ICs (a PIC and an RTC) into one (the ATmega328). We also   rewrote all the code in C/Arduino so that it is easier to maintain and hack. We also reduced the current consumption so that you should get an estimated 2 years of run time on a single CR2032 cell!
+This project is forked with permission from Spikenzie labs' Solder:Time kit that is not open source. We really wanted to make the watch kits easier to hack so we combine the two ICs (a PIC and an RTC) into one (the ATmega328). We also rewrote all the code in C/Arduino so that it is easier to maintain and hack. We also reduced the current consumption so that you should get an estimated 2 years of run time on a single CR2032 cell!
 
 v1.0 Initial code release 7-17-2011
 v1.1 Added rough support for other display colors 8-19-2011
