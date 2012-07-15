@@ -57,7 +57,12 @@
  
  8-19-2011: Now we can print things like "red, gren, blue, yelo".
  
+ 7-12-2012: Added TV-B-Gone off codes. TV-B-Gone by Mitch Altman and Limor Fried. This project allows BigTime to
+ turn off TVs by soldering an IR LED to Arduino pin 3 and GND. I updated the enclosure design files as well to
+ allow the 5MM LED to fit inside the circumference of the enclosure.
+ 
  */
+#include "main.h"
 
 #include <avr/sleep.h> //Needed for sleep_mode
 #include <avr/power.h> //Needed for powering down perihperals such as the ADC/TWI and Timers
@@ -179,8 +184,8 @@ void setup() {
 
   power_twi_disable();
   power_spi_disable();
-  power_usart0_disable();
-  //power_timer0_disable(); //Needed for delay_ms
+  //  power_usart0_disable(); //Needed for serial.print
+  //power_timer0_disable(); //Needed for delay and millis()
   power_timer1_disable();
   //power_timer2_disable(); //Needed for asynchronous 32kHz operation
 
@@ -199,8 +204,8 @@ void setup() {
   //CLKPR = (1<<CLKPCE); //Enable clock writing
   //CLKPR = (1<<CLKPS3); //Divid the system clock by 256
 
-  //Serial.begin(9600);  
-  //Serial.println("BigTime Testing:");
+  Serial.begin(9600);  
+  Serial.println("BigTime Testing:");
 
   //Now display the system color - this is mostly for production to verify
   //that the correct code is loaded onto the ATmega
@@ -223,7 +228,7 @@ void setup() {
     showColor("yeLo");
   }
 
-  showTime(); //Show the current time for a few seconds
+  //  showTime(); //Show the current time for a few seconds
 
   sei(); //Enable global interrupts
 }
@@ -233,6 +238,7 @@ void loop() {
     sleep_mode(); //Stop everything and go to sleep. Wake up if the Timer2 buffer overflows or if you hit the button
 
   if(show_the_time == TRUE || always_on == TRUE) {
+    while(digitalRead(theButton) == LOW) ; //Wait for you to remove your finger
 
     /*Serial.print(hours, DEC);
      Serial.print(":");
@@ -273,7 +279,9 @@ void showTime() {
   int combinedTime = (hours * 100) + minutes; //Combine the hours and minutes
   //int combinedTime = (minutes * 100) + seconds; //For testing, combine the minutes and seconds
 
-    //Now show the time for a certain length of time
+    boolean buttonPreviouslyHit = false;
+
+  //Now show the time for a certain length of time
   long startTime = millis();
   while( (millis() - startTime) < show_time_length) {
     displayNumber(combinedTime, TRUE); //Each call takes about 8ms, display the colon
@@ -281,6 +289,46 @@ void showTime() {
     //After the time is displayed, the segments are turned off
     //We control the brightness by modifying how long we wait between re-paints of the display
     //delayMicroseconds(display_brightness);
+
+    //If you have hit and released the button while the display is on, start the IR off sequence
+    if(digitalRead(theButton) == LOW) {
+      buttonPreviouslyHit = true;
+    }
+    else if( (buttonPreviouslyHit == true) && (digitalRead(theButton) == HIGH) ) {
+      //long irOnTime = millis(); //Tracks the amount of time we spend transmitting IR signals
+
+      //Disable TIMER2 for IR control
+      TCCR2A = 0x00;
+      TCCR2B = 0;
+      ASSR = 0;
+      TIMSK2 = 0; //Enable the timer 2 interrupt
+
+      //Turn off all the things!
+      sendAllCodes();
+
+      //Setup TIMER2
+      TCCR2A = 0x00;
+      //TCCR2B = (1<<CS22)|(1<<CS20); //Set CLK/128 or overflow interrupt every 1s
+      TCCR2B = (1<<CS22)|(1<<CS21)|(1<<CS20); //Set CLK/1024 or overflow interrupt every 8s
+      ASSR = (1<<AS2); //Enable asynchronous operation
+      TIMSK2 = (1<<TOIE2); //Enable the timer 2 interrupt
+
+      quickflashLEDx(2); //Blink Colons twice letting us know it's done
+
+      /*Serial.print("Millis test: ");
+      Serial.print(irOnTime);
+      Serial.print("/");
+      Serial.print(millis());
+      Serial.print(":");
+      Serial.println( (millis() - irOnTime)/200);*/
+
+      //delay(200);
+
+      //seconds += ((millis() - irOnTime) / 200); //This is the amount of time the system was transmitting IR codes
+      //Normally we would divide by 1000 but because the system increments millis at 1/5th the speed, we divide by 200
+
+      return;
+    }      
   }
 
 }
@@ -352,7 +400,7 @@ void setTime(void) {
       idleMiliseconds = 0;
 
       buttonHold++;
-      if(buttonHold < 10)
+      if(buttonHold < 10) //10 = 2 seconds
         minutes++; //Advance the minutes
       else {
         //Advance the minutes faster because you're holding the button for 10 seconds
@@ -685,5 +733,11 @@ Segments
 
   }
 }
+
+
+//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+
+
 
 
