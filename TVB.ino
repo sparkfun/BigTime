@@ -143,7 +143,7 @@ void setup()   {
 void sendAllCodes() {
 Start_transmission:
   // startOver will become TRUE if the user pushes the Trigger button while transmitting the sequence of all codes
-  startOver = FALSE;
+  startOver = false;
 
   // determine region from REGIONSWITCH: 1 = NA, 0 = EU
   if (digitalRead(REGIONSWITCH)) {

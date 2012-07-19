@@ -67,19 +67,20 @@
 #include <avr/sleep.h> //Needed for sleep_mode
 #include <avr/power.h> //Needed for powering down perihperals such as the ADC/TWI and Timers
 
-#define TRUE 1
-#define FALSE 0
+//Declaring this will enable IR broadcast when you hit the time button twice
+//By default, we don't enable this
+//#define ENABLE_TVBGONE 
 
 //Set the 12hourMode to false for military/world time. Set it to true for American 12 hour time.
-int TwelveHourMode = TRUE;
+int TwelveHourMode = true;
 
 //Set this variable to change how long the time is shown on the watch face. In milliseconds so 1677 = 1.677 seconds
 int show_time_length = 2000;
-int show_the_time = FALSE;
+int show_the_time = false;
 
 //You can set always_on to true and the display will stay on all the time
 //This will drain the battery in about 15 hours 
-int always_on = FALSE;
+int always_on = false;
 
 long seconds = 55;
 int minutes = 12;
@@ -128,7 +129,7 @@ SIGNAL(TIMER2_OVF_vect){
   minutes %= 60; //minutes = 36
 
   //Do we display 12 hour or 24 hour time?
-  if(TwelveHourMode == TRUE) {
+  if(TwelveHourMode == true) {
     //In 12 hour mode, hours go from 12 to 1 to 12.
     while(hours > 12) hours -= 12;
   }
@@ -141,8 +142,8 @@ SIGNAL(TIMER2_OVF_vect){
 //The interrupt occurs when you push the button
 SIGNAL(INT0_vect){
   //When you hit the button, we will need to display the time
-  //if(show_the_time == FALSE) 
-  show_the_time = TRUE;
+  //if(show_the_time == false) 
+  show_the_time = true;
 }
 
 void setup() {                
@@ -234,10 +235,10 @@ void setup() {
 }
 
 void loop() {
-  if(always_on == FALSE)
+  if(always_on == false)
     sleep_mode(); //Stop everything and go to sleep. Wake up if the Timer2 buffer overflows or if you hit the button
 
-  if(show_the_time == TRUE || always_on == TRUE) {
+  if(show_the_time == true || always_on == true) {
     while(digitalRead(theButton) == LOW) ; //Wait for you to remove your finger
 
     /*Serial.print(hours, DEC);
@@ -251,7 +252,7 @@ void loop() {
     //If you are STILL holding the button, then you must want to adjust the time
     if(digitalRead(theButton) == LOW) setTime();
 
-    show_the_time = FALSE; //Reset the button variable
+    show_the_time = false; //Reset the button variable
   }
 }
 
@@ -284,7 +285,7 @@ void showTime() {
   //Now show the time for a certain length of time
   long startTime = millis();
   while( (millis() - startTime) < show_time_length) {
-    displayNumber(combinedTime, TRUE); //Each call takes about 8ms, display the colon
+    displayNumber(combinedTime, true); //Each call takes about 8ms, display the colon
 
     //After the time is displayed, the segments are turned off
     //We control the brightness by modifying how long we wait between re-paints of the display
@@ -295,8 +296,8 @@ void showTime() {
       buttonPreviouslyHit = true;
     }
     else if( (buttonPreviouslyHit == true) && (digitalRead(theButton) == HIGH) ) {
-      //long irOnTime = millis(); //Tracks the amount of time we spend transmitting IR signals
 
+#ifdef ENABLE_TVBGONE
       //Disable TIMER2 for IR control
       TCCR2A = 0x00;
       TCCR2B = 0;
@@ -314,18 +315,7 @@ void showTime() {
       TIMSK2 = (1<<TOIE2); //Enable the timer 2 interrupt
 
       quickflashLEDx(2); //Blink Colons twice letting us know it's done
-
-      /*Serial.print("Millis test: ");
-      Serial.print(irOnTime);
-      Serial.print("/");
-      Serial.print(millis());
-      Serial.print(":");
-      Serial.println( (millis() - irOnTime)/200);*/
-
-      //delay(200);
-
-      //seconds += ((millis() - irOnTime) / 200); //This is the amount of time the system was transmitting IR codes
-      //Normally we would divide by 1000 but because the system increments millis at 1/5th the speed, we divide by 200
+#endif
 
       return;
     }      
@@ -373,7 +363,7 @@ void setTime(void) {
     minutes %= 60; //minutes = 36
 
     //Do we display 12 hour or 24 hour time?
-    if(TwelveHourMode == TRUE) {
+    if(TwelveHourMode == true) {
       //In 12 hour mode, hours go from 12 to 1 to 12.
       while(hours > 12) hours -= 12;
     }
@@ -387,11 +377,11 @@ void setTime(void) {
     int combinedTime = (hours * 100) + minutes; //Combine the hours and minutes
 
       for(int x = 0 ; x < 10 ; x++) {
-      displayNumber(combinedTime, TRUE); //Each call takes about 8ms, display the colon for about 100ms
+      displayNumber(combinedTime, true); //Each call takes about 8ms, display the colon for about 100ms
       delayMicroseconds(display_brightness); //Wait before we paint the display again
     }
     for(int x = 0 ; x < 10 ; x++) {
-      displayNumber(combinedTime, FALSE); //Each call takes about 8ms, turn off the colon for about 100ms
+      displayNumber(combinedTime, false); //Each call takes about 8ms, turn off the colon for about 100ms
       delayMicroseconds(display_brightness); //Wait before we paint the display again
     }
 
@@ -457,7 +447,7 @@ void displayNumber(int toDisplay, boolean displayColon) {
       break;
     case 2:
       digitalWrite(digit2, DIGIT_ON);
-      if(displayColon == TRUE) digitalWrite(colons, DIGIT_ON); //When we update digit 2, let's turn on colons as well
+      if(displayColon == true) digitalWrite(colons, DIGIT_ON); //When we update digit 2, let's turn on colons as well
       break;
     case 3:
       digitalWrite(digit3, DIGIT_ON);
