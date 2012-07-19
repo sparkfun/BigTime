@@ -239,6 +239,10 @@ void loop() {
     sleep_mode(); //Stop everything and go to sleep. Wake up if the Timer2 buffer overflows or if you hit the button
 
   if(show_the_time == true || always_on == true) {
+    
+    //Debounce
+    while(digitalRead(theButton) == LOW) ; //Wait for you to remove your finger
+    delay(100);
     while(digitalRead(theButton) == LOW) ; //Wait for you to remove your finger
 
     /*Serial.print(hours, DEC);
@@ -280,7 +284,7 @@ void showTime() {
   int combinedTime = (hours * 100) + minutes; //Combine the hours and minutes
   //int combinedTime = (minutes * 100) + seconds; //For testing, combine the minutes and seconds
 
-    boolean buttonPreviouslyHit = false;
+  boolean buttonPreviouslyHit = false;
 
   //Now show the time for a certain length of time
   long startTime = millis();
