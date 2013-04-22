@@ -9,7 +9,7 @@ BigTime is an open source hardware kit that allows the user to build their own w
 Repository Contents
 -------------------
 * **/Enclosure** - 3D files for watch enclosure
-* **/Firmware** - Firmware that ships on the BigTime watch and any example sketches
+* **/Firmware** - Firmware that ships on the BigTime watch and any example sketches available
 * **/Hardware** - All Eagle design files (.brd, .sch)
 
 Product Versions
