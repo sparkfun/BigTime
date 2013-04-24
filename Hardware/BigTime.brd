@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE eagle SYSTEM "eagle.dtd">
-<eagle version="6.3">
+<eagle version="6.4">
 <drawing>
 <settings>
 <setting alwaysvectorfont="no"/>
@@ -125,7 +125,7 @@
 <wire x1="0" y1="3.81" x2="3.81" y2="0" width="0.3048" layer="20"/>
 <wire x1="39.37" y1="0" x2="43.18" y2="3.81" width="0.3048" layer="20"/>
 <text x="1.397" y="12.446" size="2.032" layer="21" font="vector" ratio="15">BigTime</text>
-<text x="37.719" y="0.635" size="1.4224" layer="16" font="vector" ratio="15" rot="MR0">v14</text>
+<text x="37.719" y="0.635" size="1.4224" layer="16" font="vector" ratio="15" rot="MR0">v15</text>
 <text x="25.4" y="-10.16" size="1.778" layer="48" font="vector" ratio="15">N. Seidle</text>
 <text x="36.83" y="42.418" size="1.016" layer="22" font="vector" ratio="15" rot="MR180">GRN</text>
 <text x="18.542" y="42.418" size="1.016" layer="22" font="vector" ratio="15" rot="MR180">BLK</text>
@@ -2000,7 +2000,7 @@ design rules under a new name.</description>
 <element name="C2" library="SparkFun-Passives" package="CAP-PTH-SMALLEZ" value="100nF" x="2.54" y="31.75" rot="R90"/>
 <element name="Y1" library="SparkFun-FreqCtrl" package="TC26HEZ" value="32.768kHz" x="16.51" y="40.64" rot="R90"/>
 <element name="S1" library="SparkFun-Electromechanical" package="TACTILE-PTH-SIDEEZ" value="BUTTON" x="40.64" y="10.16" rot="R90"/>
-<element name="BAT" library="SparkFun-Electromechanical" package="BATTERY_20MM_PTH_COMPACT" value="" x="21.59" y="5.08" rot="R180"/>
+<element name="BAT" library="SparkFun-Electromechanical" package="BATTERY_20MM_PTH_COMPACT" value="" x="21.59" y="3.81" rot="R180"/>
 </elements>
 <signals>
 <signal name="GND">
@@ -2027,8 +2027,8 @@ design rules under a new name.</description>
 <contactref element="S1" pad="2"/>
 <wire x1="40.64" y1="12.66" x2="40.64" y2="22.86" width="0.3048" layer="16"/>
 <contactref element="BAT" pad="2"/>
-<via x="21.59" y="5.08" extent="1-16" drill="0.508"/>
-<wire x1="21.59" y1="5.08" x2="21.59" y2="10.16" width="0.3048" layer="16"/>
+<via x="21.59" y="3.81" extent="1-16" drill="0.508"/>
+<wire x1="21.59" y1="3.81" x2="21.59" y2="10.16" width="0.3048" layer="16"/>
 <wire x1="21.59" y1="10.16" x2="22.86" y2="11.43" width="0.3048" layer="16"/>
 <wire x1="22.86" y1="11.43" x2="39.41" y2="11.43" width="0.3048" layer="16"/>
 <wire x1="39.41" y1="11.43" x2="40.64" y2="12.66" width="0.3048" layer="16"/>
@@ -2049,11 +2049,10 @@ design rules under a new name.</description>
 <wire x1="38.1" y1="31.75" x2="40.64" y2="29.21" width="0.3048" layer="1"/>
 <wire x1="19.05" y1="31.75" x2="22.86" y2="31.75" width="0.3048" layer="1"/>
 <wire x1="22.86" y1="31.75" x2="38.1" y2="31.75" width="0.3048" layer="1"/>
-<wire x1="40.64" y1="20.32" x2="33.02" y2="12.7" width="0.3048" layer="1"/>
+<wire x1="40.64" y1="20.32" x2="32.09" y2="11.77" width="0.3048" layer="1"/>
 <contactref element="U1" pad="21"/>
 <contactref element="U1" pad="7"/>
 <contactref element="U1" pad="20"/>
-<wire x1="33.02" y1="12.7" x2="32.717" y2="12.397" width="0.3048" layer="1"/>
 <wire x1="17.78" y1="28.829" x2="17.78" y2="29.21" width="0.3048" layer="1"/>
 <wire x1="17.78" y1="29.21" x2="19.05" y2="30.48" width="0.3048" layer="1"/>
 <wire x1="19.05" y1="31.75" x2="19.05" y2="30.48" width="0.3048" layer="1"/>
@@ -2063,8 +2062,7 @@ design rules under a new name.</description>
 <contactref element="C2" pad="1"/>
 <wire x1="2.54" y1="31.75" x2="19.05" y2="31.75" width="0.3048" layer="1"/>
 <contactref element="BAT" pad="1"/>
-<wire x1="32.09" y1="5.08" x2="32.09" y2="11.77" width="0.3048" layer="1"/>
-<wire x1="32.09" y1="11.77" x2="32.717" y2="12.397" width="0.3048" layer="1"/>
+<wire x1="32.09" y1="3.81" x2="32.09" y2="11.77" width="0.3048" layer="1"/>
 </signal>
 <signal name="AMPM">
 <contactref element="LED1" pad="10"/>
