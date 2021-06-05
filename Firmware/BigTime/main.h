@@ -1,3 +1,4 @@
+#ifdef ENABLE_TVBGONE
 #include <avr/pgmspace.h>
 
 
@@ -11,11 +12,11 @@
 #define EU 0
 
 // What pins do what
-#define DBG 12
-#define LED 12 //Colons on BigTime
-#define IRLED 3
-#define TRIGGER 2
-#define REGIONSWITCH 5
+//#define DBG 12
+//#define LED 12 //Colons on BigTime
+//#define IRLED 3         //the IR sender LED 
+//#define TRIGGER 2       //the button pin; NB: this pin is "hard-coded" in the sleepNow() function in the primary .ino file by means of using external interrupt 0, which is hard-wired to pin 2
+//#define REGIONSWITCH 5  //HIGH (1) = NA, LOW (0) = EU; Pin 5 (REGIONSWITCH) is HIGH (via in input pullup resistor) for North America, or you (the user) must wire it to ground to set the codes for Europe.
 
 // Lets us calculate the size of the NA/EU databases
 #define NUM_ELEM(x) (sizeof (x) / sizeof (*(x)));
@@ -28,6 +29,8 @@
 #define NOP __asm__ __volatile__ ("nop")
 
 // Tweak this if neccessary to change timing
+// -for 8MHz Arduinos, a good starting value is 11
+// -for 16MHz Arduinos, a good starting value is 25
 //#define DELAY_CNT 25 //16MHz
 #define DELAY_CNT 11 //8MHz
 
@@ -44,3 +47,4 @@ struct IrCode {
   uint16_t const *times;
   uint8_t const*codes;
 };
+#endif
