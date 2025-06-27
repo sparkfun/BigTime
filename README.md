@@ -1,7 +1,7 @@
 BigTime Watch Kit
 =================
 
-[![BigTime Watch Kit](https://dlnmh9ip6v2uc.cloudfront.net/images/products/1/1/1/7/8/Watch-01-Working\(Pathed\)_medium.jpg)  
+[![BigTime Watch Kit](https://cdn.sparkfun.com/assets/parts/6/6/9/1/Watch-01-Working_Pathed_.jpg)  
 *BigTime Watch Kit (KIT-11178)*](https://www.sparkfun.com/products/11178)
 
 BigTime is an open source hardware kit that allows the user to build their own watch.
